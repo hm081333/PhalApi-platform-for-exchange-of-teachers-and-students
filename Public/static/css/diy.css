@@ -18,6 +18,10 @@ main {
 	flex: 1 0 auto;
 }
 
+.hide {
+	display: none !important;
+}
+
 /*返回顶部按钮样式*/
 .cd-top {
 	display: inline-block;
@@ -138,3 +142,20 @@ form#Login_in p.msg {
 	bottom:0px;
 	width:100%;
 }*/
+
+/*已加载页面默认为隐藏状态*/
+.page {
+	display: none;
+}
+
+/*当前显示的页面*/
+.page-current {
+	display: block;
+}
+
+/*文章页面最大宽度*/
+.topic_detail * {
+	max-width: 100%;
+}
+
+

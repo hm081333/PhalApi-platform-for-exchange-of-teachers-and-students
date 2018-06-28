@@ -424,6 +424,11 @@ class PhalApi_Tool
 		return URL_ROOT . 'static/' . $path;
 	}
 
+	public function staticTruePath($path)
+	{
+		return PUB_ROOT . 'static/' . $path;
+	}
+
 	/**
 	 * @param $fileName string 上传文件名
 	 * @param string $path 相对路径-文件夹名

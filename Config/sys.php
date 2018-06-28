@@ -5,29 +5,29 @@
 
 
 return array(
-	/**
-	 * 默认环境配置
-	 */
-	'debug' => true,
-
-	/**
-	 * MC缓存服务器参考配置
-	 */
-	'mc' => array(
-		'host' => '127.0.0.1',
-		'port' => 11211,
-	),
-
-	/**
-	 * 加密
-	 */
-	'crypt' => array(
-		'mcrypt_iv' => '12345678',      //8位
-	),
-	'file' => array(
-		'path' => API_ROOT . '/Runtime'
-	),
-
-	'translate' => false,
+    /**
+     * 默认环境配置
+     */
+    'debug' => true,
+    
+    /**
+     * MC缓存服务器参考配置
+     */
+    'mc' => array(
+        'host' => '127.0.0.1',
+        'port' => 11211,
+    ),
+    
+    /**
+     * 加密
+     */
+    'crypt' => array(
+        'mcrypt_iv' => '12345678',      //8位
+    ),
+    'file' => array(
+        'path' => API_ROOT . '/Runtime'
+    ),
+    
+    'translate' => false,
 
 );

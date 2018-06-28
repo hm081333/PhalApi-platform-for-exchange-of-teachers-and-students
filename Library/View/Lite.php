@@ -54,6 +54,28 @@ class View_Lite
     }
     
     /**
+     * 加载头部尾部
+     * @param  string $name html文件名称
+     * @param  array $param 参数
+     */
+    public function index()
+    {
+        //开启缓冲区
+        ob_start();
+        ob_implicit_flush(false);
+        
+        require website == 'index' ? PUB_ROOT . 'static/header/header.php' : PUB_ROOT . 'static/header/header_' . website . '.php';
+        
+        require PUB_ROOT . 'static/header/footer.php';
+        
+        //获取当前缓冲区内容
+        $content = ob_get_clean(); // 输出并清空关闭
+        $content = DI()->tool->higrid_compress_html($content); // 正则删除无关代码
+        $content = DI()->tool->compress_html($content); // 正则删除无关代码
+        echo $content;
+    }
+    
+    /**
      * 装载模板
      * @param  string $name html文件名称
      * @param  array $param 参数

@@ -45,7 +45,7 @@ class Api_Topic extends PhalApi_Api
         DI()->view->assign(array('page' => $this->page));
         DI()->view->assign(array('total' => $topic_list['total'], 'rows' => $topic_list['rows']));
         DI()->view->assign(array('class' => $topic_list['class']));
-        DI()->view->show('topic_list');
+        return DI()->view->post('topic_list');
     }
     
     public function topic()
@@ -56,7 +56,7 @@ class Api_Topic extends PhalApi_Api
         $reply_domain = new Domain_Reply();
         $reply_list = $reply_domain->getReplyList(array('topic_id' => $this->topic_id));
         DI()->view->assign(array('topic' => $topic, 'reply' => $reply_list));
-        DI()->view->show('view_topic');
+        return DI()->view->post('view_topic');
     }
     
     public function create_Topic()
@@ -102,7 +102,7 @@ class Api_Topic extends PhalApi_Api
         } else {
             $class = Domain_Class::getAllClassList();
             DI()->view->assign(array('class' => $class));
-            DI()->view->show('create_topic');
+            return DI()->view->post('create_topic');
         }
     }
     
