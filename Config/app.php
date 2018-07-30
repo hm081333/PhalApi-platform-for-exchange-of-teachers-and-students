@@ -37,19 +37,19 @@ return array(
 			Wechat_InMessage::MSG_TYPE_DEVICE_TEXT => array('Plugin_DeviceText',),
 		),
 		'config' => array(
-			'appID' => 'wx10cfa95954e03f6b',
-			'appsecret' => '3247476d1834940ddf6e11739b48e2c6',
+			'appID' => '',
+			'appsecret' => '',
 		)
 	),
 
 	'tuling_config' => array(
-		'APIkey' => '7fec48a1322b4e06827f600e04fd080f',
+		'APIkey' => '',
 		'URI' => 'http://www.tuling123.com/openapi/api'
 	),
 
 	'baidu_map_config' => array(
-		'ak' => 'OO9EUBzBqEqGnA9ItB62uUL1AaWc5n4l',
-		'sk' => '6g6g5oDczqelrOwR921ntPekrDFQGcC3'
+		'ak' => '',
+		'sk' => ''
 	),
 
 	'music_type_list' => array(
