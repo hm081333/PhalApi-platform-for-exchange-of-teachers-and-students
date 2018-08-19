@@ -130,8 +130,11 @@ class Api_Default extends PhalApi_Api
      */
     public function index()
     {
-        DI()->view->index();
-        return;
+        $class_domain = new Domain_Class();
+        $class_list = $class_domain->getClassList(0, each_page);
+        $class_list['page_total'] = ceil($class_list['total'] / each_page);
+        DI()->view->assign(array('rows' => $class_list['rows'], 'total' => $class_list['total'], 'page' => $this->page));
+        DI()->view->show('index');
     }
     
     public function main()

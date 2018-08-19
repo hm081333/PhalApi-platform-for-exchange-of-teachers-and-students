@@ -1,6 +1,7 @@
 <?php
 //加载快速方法
 require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'functions.php';
+require_once dirname(API_ROOT) . DIRECTORY_SEPARATOR . 'functions.php';
 
 /**
  * PhalApi_Loader 自动加载器
@@ -13,28 +14,29 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'functions.php';
  * @license     http://www.phalapi.net/license GPL 协议
  * @link        http://www.phalapi.net/
  * @author      dogstar <chanzonghuang@gmail.com> 2014-01-28
- */ 
-
-class PhalApi_Loader {
-
-	/**
-	 * @var array $dirs 指定需要加载的目录
-	 */
-	protected $dirs = array();
-	
-	/**
-	 * @var string $basePath 根目录
-	 */
+ */
+class PhalApi_Loader
+{
+    
+    /**
+     * @var array $dirs 指定需要加载的目录
+     */
+    protected $dirs = array();
+    
+    /**
+     * @var string $basePath 根目录
+     */
     protected $basePath = '';
-
-    public function __construct($basePath, $dirs = array()) {
+    
+    public function __construct($basePath, $dirs = array())
+    {
         $this->setBasePath($basePath);
-
+        
         if (!empty($dirs)) {
             $this->addDirs($dirs);
         }
-
-    	spl_autoload_register(array($this, 'load'));
+        
+        spl_autoload_register(array($this, 'load'));
     }
     
     /**
@@ -42,21 +44,23 @@ class PhalApi_Loader {
      * @param string $dirs 待需要加载的目录，绝对路径
      * @return NULL
      */
-    public function addDirs($dirs) {
-        if(!is_array($dirs)) {
+    public function addDirs($dirs)
+    {
+        if (!is_array($dirs)) {
             $dirs = array($dirs);
         }
-
+        
         $this->dirs = array_merge($this->dirs, $dirs);
     }
-
+    
     /**
      * 设置根目录
      * @param string $path 根目录
      * @return NULL
      */
-    public function setBasePath($path) {
-    	$this->basePath = $path;
+    public function setBasePath($path)
+    {
+        $this->basePath = $path;
     }
     
     /**
@@ -64,45 +68,48 @@ class PhalApi_Loader {
      * 可以是相对路径，也可以是绝对路径
      * @param string $filePath 文件路径
      */
-    public function loadFile($filePath) {
+    public function loadFile($filePath)
+    {
         require_once (substr($filePath, 0, 1) != '/' && substr($filePath, 1, 1) != ':')
             ? $this->basePath . DIRECTORY_SEPARATOR . $filePath : $filePath;
     }
     
     /** ------------------ 内部实现 ------------------ **/
-
+    
     /**
      * 自动加载
-	 * 
-	 * 这里，我们之所以在未找到类时没有抛出异常是为了开发人员自动加载或者其他扩展类库有机会进行处理
+     *
+     * 这里，我们之所以在未找到类时没有抛出异常是为了开发人员自动加载或者其他扩展类库有机会进行处理
      *
      * @param string $className 等待加载的类名
-     */ 
-    public function load($className) {
+     */
+    public function load($className)
+    {
         if (class_exists($className, FALSE) || interface_exists($className, FALSE)) {
             return;
         }
-
+        
         if ($this->loadClass(PHALAPI_ROOT, $className)) {
             return;
         }
-
+        
         foreach ($this->dirs as $dir) {
             if ($this->loadClass($this->basePath . DIRECTORY_SEPARATOR . $dir, $className)) {
                 return;
             }
-    	}
+        }
     }
-
-    protected function loadClass($path, $className) {
-        $toRequireFile = $path . DIRECTORY_SEPARATOR 
+    
+    protected function loadClass($path, $className)
+    {
+        $toRequireFile = $path . DIRECTORY_SEPARATOR
             . str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
         
         if (file_exists($toRequireFile)) {
             require_once $toRequireFile;
             return TRUE;
         }
-
+        
         return FALSE;
     }
 }
