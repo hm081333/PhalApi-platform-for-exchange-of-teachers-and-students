@@ -97,8 +97,11 @@ class View_Lite
         //开启缓冲区
         ob_start();
         ob_implicit_flush(false);
-        
-        require website == 'index' ? PUB_ROOT . 'static/header/header.php' : PUB_ROOT . 'static/header/header_' . website . '.php';
+        if (file_exists(PUB_ROOT . 'static/header/header_' . MODULE . '.php')) {
+            require PUB_ROOT . 'static/header/header_' . MODULE . '.php';
+        } else {
+            require PUB_ROOT . 'static/header/header.php';
+        }
         
         //检查文件是否存在
         file_exists($view) ? require $view : exit($view . ' 模板文件不存在');

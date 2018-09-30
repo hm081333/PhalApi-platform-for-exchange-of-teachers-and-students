@@ -3,8 +3,9 @@
  * $APP_NAME 统一入口
  */
 
-define('tieba', true);
-defined('website') || define('website', 'tieba');
+defined('MODULE') || define('MODULE', 'tieba');
+defined('NOW_WEB_SITE') || define('NOW_WEB_SITE', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF']);
+defined('URL_ROOT') || define('URL_ROOT', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . (dirname($_SERVER['PHP_SELF']) == '\\' ? '' : dirname($_SERVER['PHP_SELF'])) . '/Public/');
 
 require_once dirname(__FILE__) . '/Public/init.php';
 

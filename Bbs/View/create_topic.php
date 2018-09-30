@@ -45,7 +45,7 @@
 
 <script>
     window.NEDITOR_UPLOAD = '<?php echo NOW_WEB_SITE . '?service=Public.Neditor' ?>';
-    window.UEDITOR_HOME_URL = '<?php echo URL . "/Public/static/js/neditor/"; ?>'
+    window.UEDITOR_HOME_URL = '<?php echo URL_ROOT . "/static/js/neditor/"; ?>'
 </script>
 
 <script type="text/javascript" charset="utf-8"

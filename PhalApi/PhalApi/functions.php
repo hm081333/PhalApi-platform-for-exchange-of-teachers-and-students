@@ -25,7 +25,7 @@ function SL($language) {
 }
 
 /**
- * 设定语言，GL为getLanguage的简写
+ * 获取设定语言，GL为getLanguage的简写
  */
 function GL() {
 	return PhalApi_Translator::getLanguage();

@@ -30,19 +30,21 @@ require_once dirname(__FILE__) . DIRECTORY_SEPARATOR . 'PHPMailer' . DIRECTORY_S
 class PHPMailer_Lite
 {
     protected $debug;
-
+    
     protected $config;
-
-    public function __construct($debug = FALSE) {
+    
+    public function __construct($debug = FALSE)
+    {
         $this->debug = $debug;
-
+        
         //$this->config = DI()->config->get('app.PHPMailer.email');
-        $this->config = DI()->config->get('email.email');
+        // $this->config = DI()->config->get('email.email');
+        $this->config = Domain_Setting::getSetting('email');
     }
-
+    
     /**
      * 发送邮件
-     * @param array/string $addresses 待发送的邮箱地址
+     * @param array /string $addresses 待发送的邮箱地址
      * @param sting $title 标题
      * @param string $content 内容
      * @param boolean $isHtml 是否使用HTML格式，默认是
@@ -52,39 +54,39 @@ class PHPMailer_Lite
     {
         $mail = new PHPMailer;
         $cfg = $this->config;
-
+        
         $mail->isSMTP();
         $mail->Host = $cfg['host'];
         $mail->SMTPAuth = true;
         $mail->Username = $cfg['username'];
         $mail->Password = $cfg['password'];
         $mail->CharSet = 'utf-8';
-
+        
         $mail->From = $cfg['username'];
         $mail->FromName = $cfg['fromName'];
         $addresses = is_array($addresses) ? $addresses : array($addresses);
         foreach ($addresses as $address) {
             $mail->addAddress($address);
         }
-
+        
         $mail->WordWrap = 50;
         $mail->isHTML($isHtml);
-
+        
         $mail->Subject = trim($title);
         $mail->Body = $content . $cfg['sign'];
-
+        
         if (!$mail->send()) {
             if ($this->debug) {
                 DI()->logger->debug('Fail to send email with error: ' . $mail->ErrorInfo);
             }
-
+            
             return false;
         }
-
+        
         if ($this->debug) {
             DI()->logger->debug('Succeed to send email', array('addresses' => $addresses, 'title' => $title));
         }
-
+        
         return true;
     }
 }

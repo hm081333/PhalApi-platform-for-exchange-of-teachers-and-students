@@ -15,7 +15,7 @@
 		  media="screen,projection">
 	<script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
 	<script src="//cdn.bootcss.com/materialize/0.100.2/js/materialize.min.js"></script>
-	<link href="<?php echo URL_ROOT; ?>static/css/diy.css" rel="stylesheet">
+	<link href="<?php echo path_url('css/diy.css'); ?>" rel="stylesheet">
 	<script>
 		$(document).ready(function () {
 			$(".button-collapse").sideNav();
