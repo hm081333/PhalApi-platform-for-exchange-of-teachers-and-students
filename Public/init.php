@@ -19,7 +19,7 @@ defined('API_ROOT') || define('API_ROOT', dirname(__FILE__) . '/..');
 defined('NOW_WEB_SITE') || define('NOW_WEB_SITE', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . MODULE);
 if (strpos($_SERVER['SERVER_SOFTWARE'], 'nginx') !== false) {
     defined('URL_ROOT') || define('URL_ROOT', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . (dirname(dirname($_SERVER['PHP_SELF'])) == '\\' ? '' : dirname(dirname($_SERVER['PHP_SELF']))) . '/');
-}else{
+} else {
     defined('URL_ROOT') || define('URL_ROOT', (isset($_SERVER['HTTPS']) && 'on' === $_SERVER['HTTPS'] ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . (dirname($_SERVER['PHP_SELF']) == '\\' ? '' : dirname($_SERVER['PHP_SELF'])) . '/');
 }
 
@@ -29,8 +29,8 @@ session_start();
 
 $loader = new PhalApi_Loader(API_ROOT, 'Library');
 
-if (file_exists(API_ROOT . 'vendor/autoload.php')) {
-    require API_ROOT . 'vendor/autoload.php';
+if (file_exists(API_ROOT . '/vendor/autoload.php')) {
+    require_once API_ROOT . '/vendor/autoload.php';
 }
 
 /** ---------------- 注册&初始化 基本服务组件 ---------------- **/

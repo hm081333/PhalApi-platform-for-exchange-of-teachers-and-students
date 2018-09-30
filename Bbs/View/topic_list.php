@@ -18,8 +18,7 @@
                     <?php if ($row['sticky'] == "1"): ?>
                         <i class="material-icons">stars</i>
                     <?php endif; ?>
-                    <a class="btn-link" href="#topic_info"
-                       data-topic_id="<?php echo $row['id']; ?>"><?php echo T($row['topic']); ?></a><br/><?php echo T('发帖者: ' . $row['name']) ?>
+                    <a class="btn-link" href="<?php echo url('Topic.Topic', ['topic_id' => $row['id']]) ?>"><?php echo T($row['topic']); ?></a><br/><?php echo T('发帖者: ' . $row['name']) ?>
                 </td>
                 <td>
                     <?php
@@ -44,7 +43,7 @@
     <ul class="pagination">
         <?php if ($page > 1) : //上一页 ?>
             <li class="waves-effect">
-                <a class="btn-link" href="#topic_list" data-class_id="<?php echo $class['id']; ?>" data-page="<?php echo($page - 1); ?>">
+                <a class="btn-link" href="<?php echo url('Topic.Topic_List', ['class_id' => $class['id'], 'page' => ($page - 1)]) ?>">
                     <i class="material-icons">chevron_left</i>
                 </a>
             </li>
@@ -62,7 +61,7 @@
                 <a href="javascript:;">
             <?php else: ?>
                 <li class="waves-effect">
-                <a class="btn-link" href="#topic_list" data-class_id="<?php echo $class['id']; ?>" data-page="<?php echo $i; ?>">
+                <a class="btn-link" href="<?php echo url('Topic.Topic_List', ['class_id' => $class['id'], 'page' => $i]) ?>">
             <?php endif; ?>
             <?php echo $i; ?>
             </a>
@@ -70,7 +69,7 @@
         <?php endfor; ?>
         <?php if (($page * each_page) < $total) : //后一页 ?>
             <li class="waves-effect">
-                <a class="btn-link" href="#topic_list" data-class_id="<?php echo $class['id']; ?>" data-page="<?php echo($page + 1); ?>">
+                <a class="btn-link" href="<?php echo url('Topic.Topic_List', ['class_id' => $class['id'], 'page' => ($page + 1)]) ?>">
                     <i class="material-icons">chevron_right</i>
                 </a>
             </li>
