@@ -19,10 +19,7 @@ jQuery(document).ready(function ($) {
     });
 
     afterPageLoad();
-    var ip = returnCitySN['cip'];
-    $('#ip').html(ip);
-    $('#ip').attr('href', 'http://www.ip138.com/ips138.asp?ip=' + ip);
-    // var ip = $('#ip').html();
+    var ip = $('#ip').html();
     Ajax({service: 'Public.ip', ip: ip}, function (d) {
         if (d.ret == 200) {
             $('#ip_address').text(d.data.country + ' ' + d.data.area + ' ' + d.data.region + ' ' + d.data.city + ' ' + d.data.isp)

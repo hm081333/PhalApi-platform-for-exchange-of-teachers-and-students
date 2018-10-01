@@ -79,34 +79,49 @@ $(document).ready(function () {
     });
 
     // page_href_id(); //第一次访问时加载首页
+    window.addEventListener('popstate', function (event) {
+
+        console.log('location: ' + document.location);
+
+        console.log('state: ' + JSON.stringify(event.state));
+
+    });
 
     $("body").on("click", "a", function (event) {//监听body下所有a标签的点击事件
         $click = $(event.currentTarget);//当前点击的对象
         if ($click.is("a.btn-link")) {
             event.preventDefault(); //阻止默认操作 - 跳转href地址
-            console.log($click.attr('href'));
+            var href = $click.attr('href');
+            var data_obj = $click.data();
+            data = JSON.stringify(data_obj);
+            console.log(data);
             $.ajax({
                 type: 'POST',
-                url: $click.attr('href'),
-                data: {},
+                url: href,
+                data: data,
                 processData: false,
                 contentType: false,
                 dataType: 'json',
                 success: function (d) {
                     console.log(history);
                     if (parseInt(d.ret) === 200) {
+                        history.pushState(data_obj, 'page 2', href);
                         var html = d.data;
-                        var page_id = $(html).attr('id');
-                        var exist_id_num = $('#Content #' + page_id).length;
-                        var exist_id = Boolean(exist_id_num);
-                        if (exist_id) {
-                            var page_html = $(html).html();
-                            $('#Content #' + page_id).html(page_html);
+                        var $html = $(html);
+                        var page_id = $html.attr('id');
+                        if (Boolean($html.hasClass('page')) === false) {
+                            $html.addClass('page')
+                        }
+                        var new_page_selector = '#Content #' + page_id;
+                        if (Boolean($(new_page_selector).length)) {
+                            $(new_page_selector).html($html.html());
                         } else {
                             $('#Content').append(html);
                         }
                         $('.page-current').removeClass('page-current');
-                        $('#' + page_id).addClass('page-current');
+                        if (Boolean($(new_page_selector).hasClass('page-current')) === false) {
+                            $(new_page_selector).addClass('page-current');
+                        }
                     } else {
                         alertMsg(d.msg);
                     }
@@ -115,18 +130,12 @@ $(document).ready(function () {
                     alertMsg(textStatus)
                 }
             });
-            return;
-            href_id = $click.attr('href').split('#')[1];
-            href_data = $click.data() || {};
-            page_href_id();
             return false;
         } else if ($click.is("a.btn-back")) {
             event.preventDefault(); //阻止默认操作 - 跳转href地址
             backLastStep();
             return false;
         }
-        // console.log($click);
-        // return false;
     });
 
 });

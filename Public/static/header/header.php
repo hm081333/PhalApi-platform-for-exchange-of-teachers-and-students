@@ -46,7 +46,7 @@
                    style="float: left !important;">
                     <i class="material-icons">arrow_back</i></a><!--网页LOGO-->
             <?php endif; ?>
-            <a href="#index" class="brand-logo btn-link">LYiHo</a><!--网页LOGO-->
+            <a href="<?php echo url('Default.Main') ?>" class="brand-logo btn-link">LYiHo</a><!--网页LOGO-->
             <ul class="right">
                 <?php if (DI()->config->get('sys.translate')): ?>
                     <li>

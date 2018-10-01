@@ -20,10 +20,8 @@ function unix_formatter($time = false, $full = false)
 
 function url($Api = 'Default.Index', $param = [])
 {
-    if (is_array($param)) {
-        $param = http_build_query($param);
-    }
-    return NOW_WEB_SITE . "?service={$Api}&{$param}";
+    $param = http_build_query(['service' => $Api] + $param);
+    return NOW_WEB_SITE . "?{$param}";
 }
 
 function path_url($path = '')

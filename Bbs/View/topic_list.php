@@ -1,4 +1,4 @@
-<div class="page" id="topic_list">
+<div class="page  page-current" id="topic_list">
     <h3 class="center-align"><?php echo T($class['name'] . '区'); ?></h3>
 
     <table>

@@ -119,6 +119,9 @@ class View_Lite
     
     public function post($name, $param = array())
     {
+        if (!IS_AJAX) {
+            return $this->show($name, $param);
+        }
         //if (empty($this->type)) {
         //	$view = API_ROOT . '/' . $this->item . '/View/inc/' . $name . '.php';
         //} else {
