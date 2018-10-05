@@ -79,7 +79,7 @@ class Api_User extends PhalApi_Api
                 return true;
             }
         } else {
-            return DI()->view->post('login');
+            return DI()->view->show('login');
         }
     }
     
@@ -194,7 +194,7 @@ class Api_User extends PhalApi_Api
                 throw new PhalApi_Exception_InternalServerError(T('注册失败'), 2);// 抛出服务端错误
             }
         } else {
-            DI()->view->show('register');
+            return DI()->view->show('register');
         }
     }
     

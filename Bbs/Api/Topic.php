@@ -55,8 +55,8 @@ class Api_Topic extends PhalApi_Api
         $topic_model->update($this->topic_id, array('view' => new NotORM_Literal("view + 1")));//浏览量加1
         $reply_domain = new Domain_Reply();
         $reply_list = $reply_domain->getReplyList(array('topic_id' => $this->topic_id));
-        DI()->view->assign(array('topic' => $topic, 'reply' => $reply_list));
-        return DI()->view->post('view_topic');
+        // DI()->view->assign(array());
+        return DI()->view->show('topic_info',['topic' => $topic, 'reply' => $reply_list]);
     }
     
     public function create_Topic()

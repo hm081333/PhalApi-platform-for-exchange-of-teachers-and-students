@@ -41,11 +41,9 @@
     <nav style="opacity: 0;"></nav>
     <nav class="cyan darken-4" style="position: fixed; z-index: 2;"><!--导航栏语句开始-->
         <div class="nav-wrapper container"><!--导航栏内容开始-->
-            <?php if (!isset($back) && back) : ?>
-                <a href="javascript:;" class="show-on-large btn-back hide"
-                   style="float: left !important;">
-                    <i class="material-icons">arrow_back</i></a><!--网页LOGO-->
-            <?php endif; ?>
+            <a href="javascript:;" class="show-on-large btn-back hide" style="float: left !important;">
+                <i class="material-icons">arrow_back</i>
+            </a><!--返回按钮-->
             <a href="<?php echo url('Default.Main') ?>" class="brand-logo btn-link">LYiHo</a><!--网页LOGO-->
             <ul class="right">
                 <?php if (DI()->config->get('sys.translate')): ?>
@@ -68,19 +66,19 @@
         <?php if (isset($_SESSION["user_name"])) : ?>
             <!-- 用户登录后 -->
             <li>
-                <a class="btn-link" href="#edit_member">
+                <a class="btn-link" href="<?php echo url('User.Edit_Member') ?>">
                     <?php echo $_SESSION['user_name']; ?>
                 </a>
             </li>
             <li class="divider"></li>
             <li>
-                <a class="btn-link" href="#create_topic">
+                <a class="btn-link" href="<?php echo url('Topic.Create_Topic') ?>">
                     <?php echo T('发帖'); ?>
                 </a>
             </li>
             <li class="divider"></li>
             <li>
-                <a class="btn-link" href="#delivery_list">
+                <a class="btn-link" href="<?php echo url('Default.DeliveryList') ?>">
                     <?php echo T('查询快递'); ?></a>
             </li>
             <li class="divider"></li>
@@ -99,9 +97,9 @@
             <li><a onclick="logoff()"><?php echo T('退出登录'); ?></a></li>
         <?php else : ?>
             <!-- 用户未登录 -->
-            <li><a href="?service=User.register"><?php echo T('注册'); ?></a></li>
+            <li><a class="btn-link" href="<?php echo url('User.register') ?>"><?php echo T('注册'); ?></a></li>
             <li class="divider"></li>
-            <li><a class="btn-link" href="#login"><?php echo T('登录'); ?></a></li>
+            <li><a class="btn-link" href="<?php echo url('User.Login') ?>"><?php echo T('登录'); ?></a></li>
         <?php endif; ?>
     </ul>
     <?php if (DI()->config->get('sys.translate')): ?>

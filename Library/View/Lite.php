@@ -37,8 +37,12 @@ class View_Lite
      */
     public function show($name, $param = array())
     {
-        $this->load($name, $param);
-        exit();
+        if (IS_AJAX) {
+            return $this->post($name, $param);
+        } else {
+            $this->load($name, $param);
+            exit();
+        }
     }
     
     /**

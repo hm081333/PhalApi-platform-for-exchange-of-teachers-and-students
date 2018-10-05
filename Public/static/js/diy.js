@@ -40,6 +40,7 @@ function beginLoadNewPage() {
     $('.dropdown-button').dropdown('close');
     $(".material-tooltip").remove();
     $(".hiddendiv").remove();
+    $("svg").remove();
 }
 
 /**

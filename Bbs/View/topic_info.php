@@ -1,6 +1,6 @@
-<div id="topic_info" class="page  page-current">
+<div class="page page-current" id="topic_info">
     <style>
-        .topic_detail * {
+        .page#topic_info .topic_detail * {
             max-width: 100%;
         }
     </style>
@@ -111,21 +111,22 @@
         <?php endif;
         endif; ?>
     </fieldset>
+    <?php if (isset($_SESSION['user_name'])) : ?>
+        <script>
+            window.NEDITOR_UPLOAD = '<?php echo NOW_WEB_SITE . '?service=Public.Neditor' ?>';
+            window.UEDITOR_HOME_URL = '<?php echo URL_ROOT . "/static/js/neditor/"; ?>'
+        </script>
 
-    <script>
-        window.NEDITOR_UPLOAD = '<?php echo NOW_WEB_SITE . '?service=Public.Neditor' ?>';
-        window.UEDITOR_HOME_URL = '<?php echo URL_ROOT . "/static/js/neditor/"; ?>'
-    </script>
-
-    <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/neditor.config.js'); ?>"></script>
-    <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/neditor.all.js'); ?>"></script>
-    <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
-    <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
-    <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/i18n/zh-cn/zh-cn.js'); ?>"></script>
-    <!-- 实例化编辑器 -->
-    <script type="text/javascript">
-        /*实例化编辑器*/
-        /*建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例*/
-        var ue = UE.getEditor('reply_detail');
-    </script>
+        <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/neditor.config.js'); ?>"></script>
+        <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/neditor.all.js'); ?>"></script>
+        <!--建议手动加在语言，避免在ie下有时因为加载语言失败导致编辑器加载失败-->
+        <!--这里加载的语言文件会覆盖你在配置项目里添加的语言类型，比如你在配置项目里配置的是英文，这里加载的中文，那最后就是中文-->
+        <script type="text/javascript" charset="utf-8" src="<?php echo DI()->tool->staticPath('js/neditor/i18n/zh-cn/zh-cn.js'); ?>"></script>
+        <!-- 实例化编辑器 -->
+        <script type="text/javascript">
+            /*实例化编辑器*/
+            /*建议使用工厂方法getEditor创建和引用编辑器实例，如果在某个闭包下引用该编辑器，直接调用UE.getEditor('editor')就能拿到相关的实例*/
+            var ue = UE.getEditor('reply_detail');
+        </script>
+    <?php endif; ?>
 </div>

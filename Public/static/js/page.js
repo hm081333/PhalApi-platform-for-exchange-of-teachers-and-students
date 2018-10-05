@@ -1,71 +1,15 @@
-var href_id = "";
-var href_data = {};
-var href_step = getStep();
-var href_step_data = getData();
-var href_step_index = href_step.length - 1;//当前页面历史下标 初始下标为-1，有一个页面的时候应该为0
-var obj = {};
-/*追加页面对象的写法*/
-obj['index'] = function () {
-    // var data = getData({service: 'Default.Main'});
-    pageInit({service: 'Default.Main'});
-};
-obj['topic_list'] = function () {
-    pageInit({service: 'Topic.Topic_List'});
-};
-obj['topic_info'] = function () {
-    pageInit({service: 'Topic.Topic'});
-};
-obj['user_info'] = function () {
-    pageInit({service: 'User.User_Info'});
-};
-obj['edit_member'] = function () {
-    pageInit({service: 'User.Edit_Member'});
-};
-obj['create_topic'] = function () {
-    $("svg").remove();
-    pageInit({service: 'Topic.Create_Topic'});
-    sendFormAjax("#create_topic form", function (d) {
-        location.href = '#topic_info?topic_id=' + d.data['topic_id'];
-        page_href_id();
-    });
-};
-obj['delivery_list'] = function () {
-    pageInit({service: 'Default.DeliveryList'});
-    bindClick("#delivery_list a.delivery_id", function () {
-        sendButtomAjax($(this), function (d) {
-            if (d.ret == 200) {
-                $('#delivery').html(d.data);
-                $('.collapsible').collapsible();
-                $('.collapsible').collapsible('open', 0);
-                $('#delivery').modal('open');
-            } else {
-                Materialize.toast(d.msg, 2000, 'rounded');
-            }
-        });
-    });
-    bindClick("#delivery_list a.delete", function () {//触发点击事件
-        $this_tr = $(this).parent().parent();
-        sendButtomAjax($(this), function (d) {
-            if (d.ret == 200) {
-                SuccessMsg(d);
-                $this_tr.remove();
-            } else {
-                Materialize.toast(d.msg, 2000, 'rounded');
-            }
-        });
-    });
-    sendFormAjax("#delivery_list #addDelivery form", function () {
-        $('#delivery_list #addDelivery').modal('close');
-        pageReload();//重新加载当前页面
-    });
-};
-obj['login'] = function () {
-    pageInit({service: 'User.Login'});
-    sendFormAjax("#login form");
-};
-
+var page_id = "";
+var page_url = "";
+var page_data = {};
+var page_history_ids = [];
+var page_history_urls = [];
 
 $(document).ready(function () {
+    page_id = $('.page-current').attr('id');
+    page_history_ids = [page_id];
+    page_url = window.location.href;
+    page_history_urls = [page_url];
+
     bindClick("header nav #language a.lang", function () {
         sendButtomAjax($(this), function (d) {
             if (d.ret == 200) {
@@ -78,12 +22,19 @@ $(document).ready(function () {
         });
     });
 
-    // page_href_id(); //第一次访问时加载首页
     window.addEventListener('popstate', function (event) {
+        // document.location.reload()
+        // page_url = document.location.href;
+        page_data = event.state;
 
-        console.log('location: ' + document.location);
+        page_history_ids.pop();
+        page_history_urls.pop();
+        page_id = page_history_ids.pop();
+        page_url = page_history_urls.pop();
+        // console.log(page_id);
+        // console.log(page_url);
+        pageInit();
 
-        console.log('state: ' + JSON.stringify(event.state));
 
     });
 
@@ -91,208 +42,130 @@ $(document).ready(function () {
         $click = $(event.currentTarget);//当前点击的对象
         if ($click.is("a.btn-link")) {
             event.preventDefault(); //阻止默认操作 - 跳转href地址
-            var href = $click.attr('href');
-            var data_obj = $click.data();
-            data = JSON.stringify(data_obj);
-            console.log(data);
-            $.ajax({
-                type: 'POST',
-                url: href,
-                data: data,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function (d) {
-                    console.log(history);
-                    if (parseInt(d.ret) === 200) {
-                        history.pushState(data_obj, 'page 2', href);
-                        var html = d.data;
-                        var $html = $(html);
-                        var page_id = $html.attr('id');
-                        if (Boolean($html.hasClass('page')) === false) {
-                            $html.addClass('page')
-                        }
-                        var new_page_selector = '#Content #' + page_id;
-                        if (Boolean($(new_page_selector).length)) {
-                            $(new_page_selector).html($html.html());
-                        } else {
-                            $('#Content').append(html);
-                        }
-                        $('.page-current').removeClass('page-current');
-                        if (Boolean($(new_page_selector).hasClass('page-current')) === false) {
-                            $(new_page_selector).addClass('page-current');
-                        }
-                    } else {
-                        alertMsg(d.msg);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alertMsg(textStatus)
-                }
-            });
+            page_url = $click.attr('href');
+            page_data = $click.data();
+            pageInit();
+
             return false;
         } else if ($click.is("a.btn-back")) {
             event.preventDefault(); //阻止默认操作 - 跳转href地址
-            backLastStep();
+            history.back();
             return false;
         }
     });
 
 });
 
-function diy_href() {
-    // old_data = getData();
-    // if (JSON.stringify(old_data) !== '{}') {
-    //     href_data = old_data;
-    //     href_id = href_data['href_id'];
-    //     return;
-    // }
-    var href = window.location.href;
-    var hrefs = href.split('#');
-    var page_req = hrefs[1];
-    if (page_req) {
-        var reqs = page_req.split('?');
-        href_id = reqs[0];
-        if (reqs[1]) {
-            param_words = reqs[1].split('&');
-            var params = {};
-            for (i = 0; i < param_words.length; i++) {
-                param = param_words[i].split('=');
-                params[param[0]] = param[1];
+function pageInit() {
+    $.ajax({
+        type: 'POST',
+        url: page_url,
+        data: page_data,
+        dataType: 'json',
+        success: function (d) {
+            console.log(history);
+            if (parseInt(d.ret) === 200) {
+                var html = d.data;
+                var $html = $(html);
+                if ($html.length !== 1) {
+                    page_id = new Date().getTime();
+                    html = '<div class="page page-current" id="' + page_id + '">' + html + '</div>';
+                    $html = $(html);
+                } else {
+                    page_id = $html.attr('id');
+                }
+
+                if (!page_id) {
+                    page_id = new Date().getTime();
+                    $html.attr('id', page_id);
+                }
+
+                if (Boolean($html.hasClass('page')) === false) {
+                    $html.addClass('page')
+                }
+                var new_page_selector = '#Content #' + page_id;
+                if (Boolean($(new_page_selector).length)) {
+                    $(new_page_selector).html($html.html());
+                } else {
+                    $('#Content').append($html[0]);
+                }
+                var $current_page = $('.page-current');
+                var $pre_page = $($current_page[0]);
+                var pre_page_id = $pre_page.attr('id');
+                if (isNaN(pre_page_id) === false || !pre_page_id) {
+                    historyRemove(pre_page_id);
+                    $pre_page.remove();
+                } else if (page_id != pre_page_id) {
+                    $pre_page.removeClass('page-current');
+                }
+                afterPageLoad();//初始化所有必要的框架初始化
+                historyAppend();// 追加历史纪录
+                backBtn();
+                // goNextStep();
+                if (Boolean($(new_page_selector).hasClass('page-current')) === false) {
+                    $(new_page_selector).addClass('page-current');
+                }
+                console.log(page_history_ids);
+                console.log(page_history_urls);
+            } else {
+                alertMsg(d.msg);
             }
+        },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            alertMsg(textStatus)
         }
-        href_data = params;
-        href_data['href_id'] = href_id;
-        history.pushState({}, '', hrefs[0]);
-    } else if (href_step_index >= 0 && href_id === '') {
-        href_id = href_step[href_step_index];
-        href_data = href_step_data[href_id];
-    } else {
-        if (href_id == "") {
-            href_id = 'index';
-        }
-    }
-
-}
-
-/*调起页面对象函数*/
-function page_href_id() {
-    diy_href();
-    var obj_func_name = 'obj.' + href_id;
-    console.log(obj_func_name);
-    if (typeof(eval(obj_func_name)) === "function") {
-        eval(obj_func_name + '()');
-    } else {
-        // 函数不存在
-    }
-}
-
-/**
- * 页面重载 - 重载当前页面
- */
-function pageReload() {
-    Ajax(href_data, function (d) {
-        if ($('#' + href_id).length > 0) {
-            $('#' + href_id).empty();
-            $('#' + href_id).html(d.data);
-        } else {
-            var html = "";
-            html += '<div class="page page-inited" id="' + href_id + '">';
-            html += d.data;
-            html += '</div>';
-            $('#Content').append(html);
-        }
-        afterPageLoad();//初始化所有必要的框架初始化
-        backBtn();
-        goNextStep();
-        $('.page-current').removeClass('page-current');
-        $('#' + href_id).addClass('page-current');
-        console.log(href_step, href_step_data, href_step_index);
     });
 }
 
-function pageInit(data, func) {
-    $.extend(data, href_data);
-    href_data = data;
-    href_data['href_id'] = href_id;
-    Ajax(data, function (d) {
-        if ($('#' + href_id).length > 0) {
-            $('#' + href_id).empty();
-            $('#' + href_id).html(d.data);
-        } else {
-            var html = "";
-            html += '<div class="page page-inited" id="' + href_id + '">';
-            html += d.data;
-            html += '</div>';
-            $('#Content').append(html);
-        }
-        afterPageLoad();//初始化所有必要的框架初始化
-        backBtn();
-        goNextStep();
-        $('.page-current').removeClass('page-current');
-        $('#' + href_id).addClass('page-current');
-        console.log(href_step, href_step_data, href_step_index);
-    });
+function historyAppend() {
+    var index = page_history_ids.indexOf(page_id);
+    if (index <= -1) {
+        page_history_ids.push(page_id);
+        page_history_urls.push(page_url);
+        history.pushState(page_data, null, page_url);
+    } else {
+        page_history_urls.splice(index, 1, page_url);
+        history.replaceState(page_data, null, page_url)
+    }
 }
 
-function pageReInit() {
-    afterPageLoad();//初始化所有必要的框架初始化
-    backBtn();
-    $('.page-current').removeClass('page-current');
-    $('#' + href_id).addClass('page-current');
-    console.log(href_step, href_step_data, href_step_index);
+function historyRemove(val) {
+    var index = page_history_ids.indexOf(val);
+    if (index > -1) {
+        page_history_ids.splice(index, 1);
+        page_history_urls.splice(index, 1);
+    }
 }
 
 function backBtn() {
-    if (href_id === "index") {
-        $('header nav a.btn-back').addClass('hide');
-    } else {
+    if (page_history_ids.length > 1) {
         $('header nav a.btn-back').removeClass('hide');
+    } else {
+        $('header nav a.btn-back').addClass('hide');
     }
-}
-
-/**
- * 传入传值数组，存入localStorage本地存储
- * @param data
- */
-function setData(data) {
-    // localStorage.setItem("href_step_data", JSON.stringify(data));//转化为JSON字符串 存储 localStorage - H5本地存储
-    sessionStorage.setItem("href_step_data", JSON.stringify(data));//转化为JSON字符串 存储 sessionStorage - H5本地存储
-}
-
-/**
- * 传入api地址，读取localStorage本地存储数组，合并成一个完成的请求数组
- * @param data
- * @returns array
- */
-function getData(data) {
-    // var href_data = JSON.parse(localStorage.getItem("href_step_data")); //读取本地存储
-    var href_data = JSON.parse(sessionStorage.getItem("href_step_data")) || {}; //读取本地存储
-    return $.extend(data, href_data);
 }
 
 /**
  * 设置页面步进
  * @param data
  */
-function setStep(data) {
-    // localStorage.setItem("href_step", JSON.stringify(data));//转化为JSON字符串 存储 localStorage - H5本地存储
-    sessionStorage.setItem("href_step", JSON.stringify(data));//转化为JSON字符串 存储 sessionStorage - H5本地存储
+function setHistory(data) {
+    sessionStorage.setItem("page_history", JSON.stringify(data));//转化为JSON字符串 存储 sessionStorage - H5本地存储
 }
 
 /**
  * 获取页面步进
  * @returns array
  */
-function getStep() {
-    // return JSON.parse(localStorage.getItem("href_step")); //读取本地存储
-    return JSON.parse(sessionStorage.getItem("href_step")) || []; //读取本地存储
+function getHistory() {
+    return JSON.parse(sessionStorage.getItem("page_history")) || []; //读取本地存储
 }
 
 /**
  * 跳转新页面时候步进添加新页面id
  */
 function goNextStep() {
+    history.pushState(page_data, null, page_url);
     if (href_id === 'index') {
         href_step_index = 0;
         href_step = ['index'];
