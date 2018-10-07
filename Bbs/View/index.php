@@ -30,7 +30,7 @@
     <ul class="pagination">
         <?php if ($page > 1) : //上一页 ?>
             <li class="waves-effect">
-                <a class="btn-link" href="<?php echo url('Default.Main', ['page' => ($page - 1)]) ?>">
+                <a class="btn-link" href="<?php echo url('Default.Index', ['page' => ($page - 1)]) ?>">
                     <i class="material-icons">chevron_left</i>
                 </a>
             </li>
@@ -48,7 +48,7 @@
                 <a href="javascript:void(0);">
             <?php else: ?>
                 <li class="waves-effect">
-                <a class="btn-link" href="<?php echo url('Default.Main', ['page' => $i]) ?>">
+                <a class="btn-link" href="<?php echo url('Default.Index', ['page' => $i]) ?>">
             <?php endif; ?>
             <?php echo $i; ?>
             </a>
@@ -56,7 +56,7 @@
         <?php endfor; ?>
         <?php if (($page * each_page) < $total) : //后一页 ?>
             <li class="waves-effect">
-                <a class="btn-link" href="<?php echo url('Default.Main', ['page' => ($page + 1)]) ?>">
+                <a class="btn-link" href="<?php echo url('Default.Index', ['page' => ($page + 1)]) ?>">
                     <i class="material-icons">chevron_right</i>
                 </a>
             </li>

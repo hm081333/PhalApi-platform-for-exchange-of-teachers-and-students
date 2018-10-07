@@ -56,3 +56,9 @@
         </div>
     </div>
 </div>
+<script>
+    eventBind("#Content .page.page-current#login", "submit", function (event) {
+        sendFormAjax(event);
+        return false;
+    });
+</script>

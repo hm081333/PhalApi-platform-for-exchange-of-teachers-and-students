@@ -95,28 +95,27 @@ function SuccessMsg(data, SuccessCallBack, FailCallBack) {
     var msg = data.msg || data || '';
     var back = data.back || false;
     var url = data.data ? data.data.url : null;
-    var fuc = SuccessCallBack && (typeof(SuccessCallBack) == "object" || typeof(SuccessCallBack) == "function") ? SuccessCallBack : function () {
+    var fuc = SuccessCallBack && typeof(SuccessCallBack) === "function" ? SuccessCallBack : function () {
         if (url) {
             location.href = url
         } else if (back) {
             history.back();
         }
-        /* else {
-                    location.reload();
-                }*/
+        /*else {
+            location.reload();
+        }*/
     };
-    var failFuc = FailCallBack && (typeof(FailCallBack) == "object" || typeof(FailCallBack) == "function") ? FailCallBack : function () {
+    var failFuc = FailCallBack && typeof(FailCallBack) === "function" ? FailCallBack : function () {
     };
     if (parseInt(data.ret) === 200) {
         alertMsg(msg, fuc(data));
     } else {
-        console.log(failFuc);
         alertMsg(msg, failFuc(data));
     }
 }
 
 function alertMsg(msg, CallBack) {
-    var fun = CallBack && (typeof(CallBack) == "object" || typeof(CallBack) == "function") ? CallBack : null;
+    var fun = CallBack && typeof(CallBack) === "function" ? CallBack : null;
     Materialize.toast(msg, 4000, 'rounded', fun);
 }
 
@@ -148,6 +147,52 @@ function Ajax(data, SuccessCallback, file) {
         });
     }
 }
+
+function sendButtomAjax(element, callback) {
+    var data = element.data();
+    element.addClass("disabled");
+    Ajax(data, callback);
+    element.removeClass("disabled");
+}
+
+function sendFormAjax(event, callback) {
+    event.preventDefault();
+    var form = event.target;
+    var $form = $(form);
+    var $form_button = $form.find("button[type='submit']");
+    var form_disable = $form_button.hasClass("disabled");
+    if (form_disable === true) {
+        return false;
+    }
+    $form_button.addClass("disabled");
+    Ajax(new FormData(form), function (d) {
+        $form_button.removeClass("disabled");
+        SuccessMsg(d, callback);
+    }, true);
+    return false;
+}
+
+function eventBind(selector, event, func) {
+    $("body").delegate(selector, event, func);
+}
+
+function initForm() {
+    eventBind("#Content .page.page-current form", "submit", function (event) {
+        sendFormAjax(event);
+        return false;
+    });
+}
+
+function initDeleteButton() {
+    eventBind("a.delete", "click", function (event) {//触发点击事件
+        event.preventDefault();
+        sendButtomAjax($(this), function (d) {
+            SuccessMsg(d, callback);
+        });
+        return false;
+    });
+}
+
 
 $(".get_modal").click(function () {
     var $this = $(this);
@@ -356,32 +401,6 @@ $('#Register').submit(function ()//提交表单
     Ajax($("#Register").serialize());
 });
 
-function sendFormAjax(selector, callback, file) {
-    $("body").delegate(selector, "submit", function (event) {
-        event.preventDefault();
-        var $this = $(this);
-        var $form_button = $this.find("button");
-        var form_disable = $form_button.hasClass("disabled");
-        if (form_disable === true) {
-            return false;
-        }
-        $form_button.addClass("disabled");
-        Ajax($this.serialize(), function (d) {
-            $form_button.removeClass("disabled");
-            SuccessMsg(d, callback);
-        }, file);
-    });
-}
-
-function initDeleteButton() {
-    bindClick("a.delete", function (event) {//触发点击事件
-        sendButtomAjax($(this), function (d) {
-            SuccessMsg(d, callback);
-        });
-    });
-}
-
-
 // 谷歌身份认证登录
 $('#forget').submit(function ()//提交表单
 {
@@ -452,18 +471,6 @@ $('#config').submit(function ()//提交表单
 {
     Ajax($("#config").serialize());
 });
-
-function sendButtomAjax(element, callback) {
-    var data = element.data();
-    element.addClass("disabled");
-    Ajax(data, callback);
-    element.removeClass("disabled");
-}
-
-
-function bindClick(selector, func) {
-    $("body").delegate(selector, "click", func);
-}
 
 $('#Reset').submit(function ()//提交表单
 {

@@ -9,8 +9,10 @@ $(document).ready(function () {
     page_history_ids = [page_id];
     page_url = window.location.href;
     page_history_urls = [page_url];
+    initForm();
 
-    bindClick("header nav #language a.lang", function () {
+
+    eventBind("header nav #language a.lang", "click", function () {
         sendButtomAjax($(this), function (d) {
             if (d.ret == 200) {
                 SuccessMsg(d, function () {
@@ -21,6 +23,7 @@ $(document).ready(function () {
             }
         });
     });
+
 
     window.addEventListener('popstate', function (event) {
         // document.location.reload()
