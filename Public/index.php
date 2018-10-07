@@ -5,6 +5,7 @@
  * Date: 2018/7/21
  * Time: 23:06
  */
+
 $REQUEST_URI = $_SERVER['REQUEST_URI'];
 $REQUEST_URIs = explode('?', $REQUEST_URI);
 $REQUEST_URI = $REQUEST_URIs[0];

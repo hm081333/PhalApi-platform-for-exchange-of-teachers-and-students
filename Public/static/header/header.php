@@ -31,7 +31,7 @@
     <script src="<?php echo DI()->tool->staticPath('js/mini.js'); ?>"></script>
     <script>
         window.NOW_WEB_SITE = '<?php echo NOW_WEB_SITE; ?>';
-        window.URL_ROOT = '<?php echo URL; ?>';
+        window.URL_ROOT = '<?php echo URL_ROOT; ?>';
     </script>
 </head>
 

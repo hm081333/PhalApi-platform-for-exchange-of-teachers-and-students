@@ -4,6 +4,14 @@
  */
 
 /** ---------------- 根目录定义，自动加载 ---------------- **/
+// 开启跨域访问
+// var_dump($_SERVER['REQUEST_METHOD']);
+header('Access-Control-Allow-Origin:*');// 允许请求的地址
+header('Access-Control-Allow-Headers:*');// 允许请求的Headers
+header('Access-Control-Allow-Methods: GET,POST,OPTIONS');// 允许请求的方式
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    exit();
+}
 
 //开启GZIP
 if (!headers_sent() && extension_loaded("zlib") && strstr($_SERVER["HTTP_ACCEPT_ENCODING"], "gzip")) {//开启gzip压缩

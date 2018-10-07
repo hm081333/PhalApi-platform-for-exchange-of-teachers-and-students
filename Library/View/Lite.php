@@ -58,6 +58,24 @@ class View_Lite
     }
     
     /**
+     * 模板值获取
+     * @param string|bool $key 参数下标
+     * @return bool|mixed
+     */
+    public function get($key = false)
+    {
+        return $this->param[$key] ?? false;
+    }
+    
+    /**
+     * 模板值获取
+     */
+    public function getAll()
+    {
+        return $this->param;
+    }
+    
+    /**
      * 加载头部尾部
      * @param  string $name html文件名称
      * @param  array $param 参数
